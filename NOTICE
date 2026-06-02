@@ -1,0 +1,11 @@
+pwstrength
+Copyright (c) 2026 orpham
+
+This project is a TypeScript rewrite of pwstrength-bootstrap
+(https://github.com/ablanco/jquery.pwstrength.bootstrap), originally created by:
+
+  Copyright (c) 2008-2013 Tane Piper
+  Copyright (c) 2013-2026 Alejandro Blanco
+
+The scoring rules, common password list, and locale translations are derived
+from the original work and are used under the terms of the MIT License.

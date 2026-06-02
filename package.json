@@ -1,0 +1,55 @@
+{
+    "name": "@orpham/pwstrength",
+    "author": "orpham",
+    "version": "1.0.0",
+    "description": "Password strength meter.",
+    "homepage": "https://github.com/orpham/pwstrength",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/orpham/pwstrength.git"
+    },
+    "keywords": [
+        "password",
+        "strength",
+        "meter"
+    ],
+    "bugs": {
+        "url": "https://github.com/orpham/pwstrength/issues"
+    },
+    "license": "MIT",
+    "type": "module",
+    "main": "./dist/pwstrength.umd.cjs",
+    "module": "./dist/pwstrength.js",
+    "types": "./dist/index.d.ts",
+    "exports": {
+        ".": {
+            "import": "./dist/pwstrength.js",
+            "require": "./dist/pwstrength.umd.cjs",
+            "types": "./dist/index.d.ts"
+        },
+        "./locales/*": "./locales/*"
+    },
+    "files": [
+        "dist",
+        "locales"
+    ],
+    "scripts": {
+        "build": "vite build",
+        "test": "vitest run",
+        "test:watch": "vitest",
+        "dev": "vite build --watch",
+        "serve": "npx serve ."
+    },
+    "peerDependencies": {
+        "bootstrap": ">=5.0.0"
+    },
+    "devDependencies": {
+        "@types/bootstrap": "^5.2.10",
+        "@types/node": "^25.9.1",
+        "jsdom": "^29.1.1",
+        "typescript": "^5.4.5",
+        "vite": "8.0.5",
+        "vite-plugin-dts": "^5.0.1",
+        "vitest": "^4.1.7"
+    }
+}
