@@ -1,7 +1,7 @@
 {
     "name": "@orpham/pwstrength",
     "author": "orpham",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "Password strength meter.",
     "homepage": "https://github.com/orpham/pwstrength",
     "repository": {
