@@ -23,8 +23,9 @@ npm test
 
 ## Adding a rule
 
-Custom rules can be added at runtime via `addRule()` — see the [README](https://github.com/orpham/pwstrength/blob/main/README.md).
-If you believe a rule is useful enough to be built in, open an issue first to discuss it.
+Custom rules can be added at runtime via `addRule()` — see
+the [README](https://github.com/orpham/pwstrength/blob/main/README.md). If you believe a rule is useful enough to be
+built in, open an issue first to discuss it.
 
 ## Code style
 

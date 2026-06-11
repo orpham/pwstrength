@@ -1,11 +1,12 @@
 # pwstrength
 
 [![CI](https://github.com/orpham/pwstrength/actions/workflows/ci.yml/badge.svg)](https://github.com/orpham/pwstrength/actions/workflows/ci.yml)
+[![jsDelivr](https://data.jsdelivr.com/v1/package/npm/@orpham/pwstrength/badge)](https://www.jsdelivr.com/package/npm/@orpham/pwstrength)
 
 Password strength meter for [Bootstrap 5](https://getbootstrap.com) — no jQuery required.
 
-A TypeScript rewrite of [pwstrength-bootstrap](https://github.com/ablanco/jquery.pwstrength.bootstrap)
-with a modern class-based API, full type declarations, and zero runtime dependencies.
+A TypeScript rewrite of [pwstrength-bootstrap](https://github.com/ablanco/jquery.pwstrength.bootstrap) with a modern
+class-based API, full type declarations, and zero runtime dependencies.
 
 ## Installation
 
@@ -36,7 +37,7 @@ const meter = new PasswordStrength(
             container: document.getElementById('pw-container'),
             viewports: {progress: '.pwstrength_viewport_progress'},
             showVerdictsInsideProgressBar: true,
-            progressBarExtraCssClasses: 'progress-bar-striped progress-bar-animated',
+            progressBarExtraCssClasses: 'progress-bar-striped progress-bar-animated'
         }
     }
 );
@@ -45,7 +46,6 @@ const meter = new PasswordStrength(
 ### CDN (no bundler)
 
 ```html
-
 <script src="https://cdn.jsdelivr.net/npm/@orpham/pwstrength/dist/pwstrength.umd.cjs"></script>
 <script>
     const meter = new pwstrength.PasswordStrength(input, options);
@@ -164,7 +164,7 @@ import {PasswordStrength, createI18n} from '@orpham/pwstrength';
 import de from '@orpham/pwstrength/locales/de.json';
 
 const meter = new PasswordStrength(input, {
-    i18n: createI18n(de),
+    i18n: createI18n(de)
 });
 ```
 
@@ -176,7 +176,7 @@ You can also wire in any i18n library by providing a custom `t` function:
 import i18next from 'i18next';
 
 const meter = new PasswordStrength(input, {
-    i18n: {t: (key) => i18next.t(key)},
+    i18n: {t: (key) => i18next.t(key)}
 });
 ```
 
@@ -224,6 +224,6 @@ npm run test:watch # watch mode
 
 ## License
 
-MIT — see [LICENSE.txt](LICENSE.txt).
-Based on [pwstrength-bootstrap](https://github.com/ablanco/jquery.pwstrength.bootstrap)
-by Tane Piper and Alejandro Blanco — see [NOTICE](NOTICE).
+MIT — see [LICENSE.txt](LICENSE.txt). Based
+on [pwstrength-bootstrap](https://github.com/ablanco/jquery.pwstrength.bootstrap) by Tane Piper and Alejandro Blanco —
+see [NOTICE](NOTICE).
