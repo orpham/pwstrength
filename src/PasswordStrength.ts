@@ -1,5 +1,6 @@
 import {defaultOptions} from './defaultOptions';
 import {executeRules, getVerdictAndLevel, getBuiltinRule} from './rules';
+import {compileRequirements} from './requirements';
 import {initUI, destroyUI, updateUI} from './ui';
 import type {IPasswordStrength, PasswordStrengthOptions, ResolvedOptions, RuleFunction} from './types';
 
@@ -7,6 +8,9 @@ function resolveOptions(user: PasswordStrengthOptions): ResolvedOptions {
     return {
         ...defaultOptions,
         ...user,
+        requirements: user.requirements
+            ? compileRequirements(user.requirements)
+            : defaultOptions.requirements,
         rules: {
             ...defaultOptions.rules,
             ...user.rules,

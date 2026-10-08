@@ -89,6 +89,7 @@ new PasswordStrength(input: HTMLInputElement, options?: PasswordStrengthOptions)
 | `onScore`            | `(word, score) => number`            | —                              | Intercept and modify the computed score                                                 |
 | `zxcvbn`             | `boolean`                            | `false`                        | Use [zxcvbn](https://github.com/dropbox/zxcvbn) for scoring (must be loaded separately) |
 | `zxcvbnTerms`        | `string[]`                           | `[]`                           | Additional terms passed to zxcvbn                                                       |
+| `requirements`       | `PasswordRequirement[]`              | `[]`                           | Live requirement checklist — see [Requirements checklist](#requirements-checklist)      |
 
 ### Rules (`rules.*`)
 
@@ -105,49 +106,49 @@ new PasswordStrength(input: HTMLInputElement, options?: PasswordStrengthOptions)
 
 | Rule                        | Default active | Default score | Description                                                       |
 |-----------------------------|----------------|---------------|-------------------------------------------------------------------|
-| `wordNotEmail`              | ✅              | `-100`        | Penalizes passwords that look like an email address               |
-| `wordMinLength`             | ✅              | `-50`         | Penalizes passwords shorter than `minChar`                        |
-| `wordMaxLength`             | ❌              | `-50`         | Penalizes passwords longer than `maxChar`                         |
-| `wordInvalidChar`           | ❌              | `-100`        | Penalizes passwords containing invalid characters                 |
-| `wordSimilarToUsername`     | ✅              | `-100`        | Penalizes passwords that contain the username                     |
-| `wordSequences`             | ✅              | `-20`         | Penalizes keyboard or alphabetic sequences (e.g. `abc`, `qwerty`) |
-| `wordTwoCharacterClasses`   | ✅              | `2`           | Rewards use of at least two character classes                     |
-| `wordRepetitions`           | ✅              | `-25`         | Penalizes triple character repetitions (e.g. `aaa`)               |
-| `wordLowercase`             | ✅              | `1`           | Rewards lowercase letters                                         |
-| `wordUppercase`             | ✅              | `3`           | Rewards uppercase letters                                         |
-| `wordOneNumber`             | ✅              | `3`           | Rewards at least one digit                                        |
-| `wordThreeNumbers`          | ✅              | `5`           | Rewards three or more digits                                      |
-| `wordOneSpecialChar`        | ✅              | `3`           | Rewards at least one special character                            |
-| `wordTwoSpecialChar`        | ✅              | `5`           | Rewards two or more special characters                            |
-| `wordUpperLowerCombo`       | ✅              | `2`           | Rewards a mix of upper and lowercase                              |
-| `wordLetterNumberCombo`     | ✅              | `2`           | Rewards a mix of letters and digits                               |
-| `wordLetterNumberCharCombo` | ✅              | `2`           | Rewards a mix of letters, digits, and special characters          |
-| `wordIsACommonPassword`     | ✅              | `-100`        | Penalizes common passwords                                        |
+| `wordNotEmail`              | ✅             | `-100`        | Penalizes passwords that look like an email address               |
+| `wordMinLength`             | ✅             | `-50`         | Penalizes passwords shorter than `minChar`                        |
+| `wordMaxLength`             | ❌             | `-50`         | Penalizes passwords longer than `maxChar`                         |
+| `wordInvalidChar`           | ❌             | `-100`        | Penalizes passwords containing invalid characters                 |
+| `wordSimilarToUsername`     | ✅             | `-100`        | Penalizes passwords that contain the username                     |
+| `wordSequences`             | ✅             | `-20`         | Penalizes keyboard or alphabetic sequences (e.g. `abc`, `qwerty`) |
+| `wordTwoCharacterClasses`   | ✅             | `2`           | Rewards use of at least two character classes                     |
+| `wordRepetitions`           | ✅             | `-25`         | Penalizes triple character repetitions (e.g. `aaa`)               |
+| `wordLowercase`             | ✅             | `1`           | Rewards lowercase letters                                         |
+| `wordUppercase`             | ✅             | `3`           | Rewards uppercase letters                                         |
+| `wordOneNumber`             | ✅             | `3`           | Rewards at least one digit                                        |
+| `wordThreeNumbers`          | ✅             | `5`           | Rewards three or more digits                                      |
+| `wordOneSpecialChar`        | ✅             | `3`           | Rewards at least one special character                            |
+| `wordTwoSpecialChar`        | ✅             | `5`           | Rewards two or more special characters                            |
+| `wordUpperLowerCombo`       | ✅             | `2`           | Rewards a mix of upper and lowercase                              |
+| `wordLetterNumberCombo`     | ✅             | `2`           | Rewards a mix of letters and digits                               |
+| `wordLetterNumberCharCombo` | ✅             | `2`           | Rewards a mix of letters, digits, and special characters          |
+| `wordIsACommonPassword`     | ✅             | `-100`        | Penalizes common passwords                                        |
 
 ### UI (`ui.*`)
 
-| Option                          | Type                                       | Default                                                      | Description                                                     |
-|---------------------------------|--------------------------------------------|--------------------------------------------------------------|-----------------------------------------------------------------|
-| `colorClasses`                  | `string[]`                                 | `['danger','danger','danger','warning','warning','success']` | Bootstrap color class for each verdict level (6 entries)        |
-| `showProgressBar`               | `boolean`                                  | `true`                                                       | Render a Bootstrap progress bar                                 |
-| `progressBarEmptyPercentage`    | `number`                                   | `1`                                                          | Progress bar width when the input is empty                      |
-| `progressBarMinWidth`           | `number`                                   | `1`                                                          | Minimum progress bar width in pixels                            |
-| `progressBarMinPercentage`      | `number`                                   | `1`                                                          | Minimum progress bar width in percent                           |
-| `progressExtraCssClasses`       | `string`                                   | `''`                                                         | Extra CSS classes on the `<div class="progress">` element       |
-| `progressBarExtraCssClasses`    | `string`                                   | `''`                                                         | Extra CSS classes on the `<div class="progress-bar">` element   |
-| `showVerdicts`                  | `boolean`                                  | `true`                                                       | Show verdict labels (Very Weak … Very Strong)                   |
-| `showVerdictsInsideProgressBar` | `boolean`                                  | `false`                                                      | Render the verdict label inside the progress bar                |
-| `useVerdictCssClass`            | `boolean`                                  | `false`                                                      | Apply the color class to the verdict element                    |
-| `showErrors`                    | `boolean`                                  | `false`                                                      | Show a list of failed rule messages                             |
-| `showScore`                     | `boolean`                                  | `false`                                                      | Show the raw numeric score                                      |
-| `showStatus`                    | `boolean`                                  | `false`                                                      | Apply a `border-*` class to the input element                   |
-| `showPopover`                   | `boolean`                                  | `false`                                                      | Show verdict and errors in a Bootstrap Popover                  |
-| `popoverPlacement`              | `string`                                   | `'bottom'`                                                   | Popover placement (`top`, `bottom`, `left`, `right`)            |
-| `container`                     | `string \| HTMLElement \| null`            | `null`                                                       | Container element (defaults to the input's parent)              |
-| `viewports`                     | `UIViewports`                              | `{}`                                                         | CSS selectors for progress, verdict, errors, and score elements |
-| `scores`                        | `[number, number, number, number, number]` | `[0, 14, 26, 38, 50]`                                        | Score thresholds for the six verdict levels                     |
-| `spanError`                     | `(text: string) => string`                 | —                                                            | Custom renderer for a single error message                      |
-| `popoverError`                  | `(errors: string[]) => string`             | —                                                            | Custom renderer for the popover error list                      |
+| Option                          | Type                                       | Default                                                      | Description                                                                  |
+|---------------------------------|--------------------------------------------|--------------------------------------------------------------|------------------------------------------------------------------------------|
+| `colorClasses`                  | `string[]`                                 | `['danger','danger','danger','warning','warning','success']` | Bootstrap color class for each verdict level (6 entries)                     |
+| `showProgressBar`               | `boolean`                                  | `true`                                                       | Render a Bootstrap progress bar                                              |
+| `progressBarEmptyPercentage`    | `number`                                   | `1`                                                          | Progress bar width when the input is empty                                   |
+| `progressBarMinWidth`           | `number`                                   | `1`                                                          | Minimum progress bar width in pixels                                         |
+| `progressBarMinPercentage`      | `number`                                   | `1`                                                          | Minimum progress bar width in percent                                        |
+| `progressExtraCssClasses`       | `string`                                   | `''`                                                         | Extra CSS classes on the `<div class="progress">` element                    |
+| `progressBarExtraCssClasses`    | `string`                                   | `''`                                                         | Extra CSS classes on the `<div class="progress-bar">` element                |
+| `showVerdicts`                  | `boolean`                                  | `true`                                                       | Show verdict labels (Very Weak … Very Strong)                                |
+| `showVerdictsInsideProgressBar` | `boolean`                                  | `false`                                                      | Render the verdict label inside the progress bar                             |
+| `useVerdictCssClass`            | `boolean`                                  | `false`                                                      | Apply the color class to the verdict element                                 |
+| `showErrors`                    | `boolean`                                  | `false`                                                      | Show a list of failed rule messages                                          |
+| `showScore`                     | `boolean`                                  | `false`                                                      | Show the raw numeric score                                                   |
+| `showStatus`                    | `boolean`                                  | `false`                                                      | Apply a `border-*` class to the input element                                |
+| `showPopover`                   | `boolean`                                  | `false`                                                      | Show verdict and errors in a Bootstrap Popover                               |
+| `popoverPlacement`              | `string`                                   | `'bottom'`                                                   | Popover placement (`top`, `bottom`, `left`, `right`)                         |
+| `container`                     | `string \| HTMLElement \| null`            | `null`                                                       | Container element (defaults to the input's parent)                           |
+| `viewports`                     | `UIViewports`                              | `{}`                                                         | CSS selectors for progress, verdict, errors, score and requirements elements |
+| `scores`                        | `[number, number, number, number, number]` | `[0, 14, 26, 38, 50]`                                        | Score thresholds for the six verdict levels                                  |
+| `spanError`                     | `(text: string) => string`                 | —                                                            | Custom renderer for a single error message                                   |
+| `popoverError`                  | `(errors: string[]) => string`             | —                                                            | Custom renderer for the popover error list                                   |
 
 ### i18n (`i18n.*`)
 
@@ -208,6 +209,75 @@ type RuleFunction = (
 
 A **positive** return value adds to the score; a **negative** return value subtracts and triggers an error message (if
 `showErrors` is enabled). Returning `false`, `null`, or `undefined` also counts as a failure.
+
+## Requirements checklist
+
+A requirement checklist shows the rules a password must satisfy and ticks each one off live as the user types. It is
+independent of the scoring rules: a requirement is a plain pass / fail predicate with a label.
+
+The library adds the classes `met` / `unmet` to each `li.password-requirement` — the look (icons, colors) is up to your
+CSS, so it stays framework-agnostic. See [`examples/requirements`](examples/requirements) for a full example.
+
+```css
+.password-requirement::before {
+    content: "\2717";
+}
+
+/* ✗ */
+.password-requirement.met::before {
+    content: "\2713";
+}
+
+/* ✓ */
+.password-requirement.met {
+    color: green;
+}
+```
+
+Requirements can be defined in two ways, both sharing the same declarative vocabulary (`pattern`, `notPattern`,
+`minLength`, `maxLength`, `flags`):
+
+### Config mode
+
+Pass a `requirements` array. Each entry uses either a custom `test` function or declarative constraints (the latter is
+JSON-serializable, so it can be produced by a server and `JSON.parse`d on the client). The library renders the list into
+the `requirements` viewport.
+
+```typescript
+new PasswordStrength(input, {
+    requirements: [
+        {key: 'length', label: 'At least 8 characters', minLength: 8},
+        {key: 'upper', label: 'An uppercase letter', pattern: '[A-Z]'},
+        {key: 'nospace', label: 'No whitespace', notPattern: '\\s'},
+        {key: 'custom', label: 'Custom check', test: w => myCheck(w)},
+    ],
+    ui: {viewports: {requirements: '.pw-requirements'}}
+});
+```
+
+### Markup mode
+
+Server-rendered apps can declare the checklist directly in HTML via `data-*` attributes. If no `requirements` array is
+given and a `ul.password-requirements` is found in the viewport, the library adopts it — labels come from the element's
+text, constraints from the attributes. No JS configuration and no JSON needed; labels are localized by your server.
+
+```html
+<div class="pw-requirements">
+    <ul class="password-requirements" aria-live="polite">
+        <li data-requirement="length" data-min-length="8">At least 8 characters</li>
+        <li data-requirement="upper" data-pattern="[A-Z]">An uppercase letter</li>
+        <li data-requirement="nospace" data-not-pattern="\s">No whitespace</li>
+    </ul>
+</div>
+```
+
+```typescript
+new PasswordStrength(input, {ui: {viewports: {requirements: '.pw-requirements'}}});
+```
+
+> Note: a "must not match" constraint (`notPattern` / `maxLength`) is trivially satisfied by an empty value, so such an
+> item shows as `met` before the user types. Hide the checklist until the field has focus / content via CSS if that is
+> not desired.
 
 ## Build
 

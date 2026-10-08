@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>pwstrength — Requirements Example</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css">
+    <style>
+        body {
+            padding: 2rem;
+        }
+
+        .demo {
+            max-width: 480px;
+        }
+
+        .password-requirements {
+            font-size: .9rem;
+            list-style: none;
+            margin: .5rem 0 0;
+            padding-left: 0;
+        }
+
+        .password-requirement {
+            align-items: center;
+            display: flex;
+            gap: .5rem;
+        }
+
+        .password-requirement::before {
+            content: "\2717"; /* ✗ */
+            text-align: center;
+            width: 1em;
+        }
+
+        .password-requirement.met::before {
+            content: "\2713"; /* ✓ */
+        }
+
+        .password-requirement.unmet {
+            color: var(--bs-secondary-color);
+        }
+
+        .password-requirement.met {
+            color: var(--bs-success);
+        }
+    </style>
+</head>
+<body>
+<div class="demo">
+    <h4 class="mb-4">pwstrength — Requirements Example</h4>
+
+    <!-- Mode A: config-driven -->
+    <h6 class="text-muted">Config mode</h6>
+    <div id="wrap-1" class="mb-3">
+        <label for="password-1" class="form-label">Password</label>
+        <input id="password-1" type="password" class="form-control" placeholder="Password">
+        <div class="pwstrength_viewport_progress-1 mt-2"></div>
+        <div class="pwstrength_viewport_requirements-1"></div>
+    </div>
+
+    <!-- Mode B: markup-driven (server-rendered list with data-* constraints) -->
+    <h6 class="text-muted">Markup mode</h6>
+    <div id="wrap-2">
+        <label for="password-2" class="form-label">Password</label>
+        <input id="password-2" type="password" class="form-control" placeholder="Password">
+        <div class="pwstrength_viewport_requirements-2">
+            <ul class="password-requirements" aria-live="polite">
+                <li data-requirement="length" data-min-length="8">At least 8 characters</li>
+                <li data-requirement="upper" data-pattern="[A-Z]">An uppercase letter</li>
+                <li data-requirement="digit" data-pattern="[0-9]">A digit</li>
+                <li data-requirement="nospace" data-not-pattern="\s">No whitespace</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<script type="module">
+    import {PasswordStrength} from '../../dist/pwstrength.js';
+
+    // Mode A — requirements defined in JS (function or declarative constraints)
+    new PasswordStrength(document.getElementById('password-1'), {
+        minChar: 8,
+        maxChar: 64,
+        requirements: [
+            {key: 'length', label: 'At least 8 characters', minLength: 8},
+            {key: 'upper', label: 'An uppercase letter', pattern: '[A-Z]'},
+            {key: 'lower', label: 'A lowercase letter', pattern: '[a-z]'},
+            {key: 'digit', label: 'A digit', pattern: '[0-9]'},
+            {key: 'special', label: 'A special character', test: w => /[^A-Za-z0-9]/.test(w)},
+            {key: 'nospace', label: 'No whitespace', notPattern: '\\s'},
+        ],
+        ui: {
+            container: '#wrap-1',
+            viewports: {
+                progress: '.pwstrength_viewport_progress-1',
+                requirements: '.pwstrength_viewport_requirements-1'
+            },
+            progressBarExtraCssClasses: 'progress-bar-striped progress-bar-animated',
+            showVerdictsInsideProgressBar: true,
+        },
+    });
+
+    // Mode B — requirements come from the server-rendered markup (data-* attributes)
+    new PasswordStrength(document.getElementById('password-2'), {
+        ui: {
+            container: '#wrap-2',
+            viewports: {requirements: '.pwstrength_viewport_requirements-2'},
+            showProgressBar: false,
+            showVerdicts: false,
+        },
+    });
+</script>
+</body>
+</html>

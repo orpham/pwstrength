@@ -58,6 +58,7 @@ export const defaultOptions: ResolvedOptions = {
     onScore: undefined,
     zxcvbn: false,
     zxcvbnTerms: [],
+    requirements: [],
     rules: {
         activated: {
             wordNotEmail: true,

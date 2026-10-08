@@ -1,5 +1,6 @@
-import type {ResolvedOptions, UIElements} from './types';
+import type {ResolvedOptions, ResolvedRequirement, UIElements} from './types';
 import {getVerdictAndLevel} from './rules';
+import {readRequirementsFromDom} from './requirements';
 
 const viewportCache = new WeakMap<HTMLInputElement, UIElements>();
 
@@ -41,8 +42,9 @@ export function getUIElements(options: ResolvedOptions, input: HTMLInputElement)
 
     const errors = showPopover ? null : findIn(container, viewports.errors, 'ul.error-list');
     const score = findIn(container, viewports.score, 'span.password-score');
+    const requirements = findIn(container, viewports.requirements, 'ul.password-requirements');
 
-    const elements: UIElements = {progressbar, verdict, errors, score};
+    const elements: UIElements = {progressbar, verdict, errors, score, requirements};
     viewportCache.set(input, elements);
     return elements;
 }
@@ -93,6 +95,8 @@ export function initUI(options: ResolvedOptions, input: HTMLInputElement): void 
     if (ui.showScore) {
         insertHTML(input, '<span class="password-score"></span>', options, ui.viewports.score);
     }
+
+    initRequirements(options, input);
 }
 
 export function destroyUI(options: ResolvedOptions, input: HTMLInputElement): void {
@@ -102,8 +106,9 @@ export function destroyUI(options: ResolvedOptions, input: HTMLInputElement): vo
         if (!options.ui.showVerdictsInsideProgressBar) elements.verdict?.remove();
         elements.errors?.remove();
         elements.score?.remove();
-        viewportCache.delete(input);
     }
+    destroyRequirements(options, input);
+    viewportCache.delete(input);
     if (options.ui.showPopover) destroyPopover(input);
 }
 
@@ -134,6 +139,7 @@ export function updateUI(
 
     if (options.ui.showScore) updateScore(options, input, score);
     if (options.ui.showStatus) updateFieldStatus(options, input, colorIndex, score === undefined);
+    if (options.requirements.length > 0) updateRequirements(options, input);
 }
 
 function calcPercentage(options: ResolvedOptions, score: number): number {
@@ -294,5 +300,83 @@ function updatePopover(
             instance.show();
         }
     } catch { /* ignore */
+    }
+}
+
+// --- Requirements checklist ---
+
+function findRequirementList(options: ResolvedOptions, input: HTMLInputElement): HTMLElement | null {
+    const container = getContainer(options, input);
+    const scope = options.ui.viewports.requirements
+        ? container.querySelector<HTMLElement>(options.ui.viewports.requirements)
+        : container;
+    return scope?.querySelector<HTMLElement>('ul.password-requirements') ?? null;
+}
+
+function renderRequirements(list: ResolvedRequirement[]): HTMLUListElement {
+    const ul = document.createElement('ul');
+    ul.className = 'password-requirements';
+    ul.dataset.pwstrengthGenerated = 'true';
+    ul.setAttribute('aria-live', 'polite');
+    for (const req of list) {
+        const li = document.createElement('li');
+        li.className = 'password-requirement unmet';
+        li.dataset.requirement = req.key;
+        li.textContent = req.label;
+        ul.appendChild(li);
+    }
+    return ul;
+}
+
+function initRequirements(options: ResolvedOptions, input: HTMLInputElement): void {
+    if (options.requirements.length > 0) {
+        // Config mode: render the checklist from the resolved requirements.
+        const container = getContainer(options, input);
+        const target = options.ui.viewports.requirements
+            ? container.querySelector(options.ui.viewports.requirements)
+            : null;
+        const ul = renderRequirements(options.requirements);
+        if (target) {
+            target.appendChild(ul);
+        } else {
+            input.insertAdjacentElement('afterend', ul);
+        }
+        viewportCache.delete(input);
+    } else {
+        // Markup mode: adopt a server-rendered checklist, if present. Ensure each item carries the
+        // base class so the same styling hooks apply as in config mode.
+        const list = findRequirementList(options, input);
+        if (list) {
+            list.querySelectorAll<HTMLElement>('li[data-requirement]')
+                .forEach(li => li.classList.add('password-requirement'));
+            options.requirements = readRequirementsFromDom(list);
+        }
+    }
+}
+
+function updateRequirements(options: ResolvedOptions, input: HTMLInputElement): void {
+    const list = getUIElements(options, input).requirements;
+    if (!list) return;
+
+    const word = input.value;
+    const tests = new Map(options.requirements.map(req => [req.key, req.test] as const));
+
+    list.querySelectorAll<HTMLElement>('li[data-requirement]').forEach(li => {
+        const test = tests.get(li.dataset.requirement ?? '');
+        if (!test) return;
+        const met = test(word);
+        li.classList.toggle('met', met);
+        li.classList.toggle('unmet', !met);
+    });
+}
+
+function destroyRequirements(options: ResolvedOptions, input: HTMLInputElement): void {
+    const list = findRequirementList(options, input);
+    if (!list) return;
+    if (list.dataset.pwstrengthGenerated === 'true') {
+        list.remove();
+    } else {
+        list.querySelectorAll('li[data-requirement]')
+            .forEach(li => li.classList.remove('met', 'unmet'));
     }
 }

@@ -3,6 +3,16 @@
 All notable changes to this project will be documented in this file. The format is based
 on [Keep a Changelog](https://keepachangelog.com).
 
+## [1.1.0] - 2026-10-08
+
+### Added
+
+- Live requirement checklist: show the rules a password must satisfy and tick each one off as the user types. Define
+  requirements in JS (`requirements` option, custom `test` function or declarative `pattern` / `notPattern` /
+  `minLength` / `maxLength`), or let the library adopt a server-rendered `ul.password-requirements` via `data-*`
+  attributes (markup mode). The library toggles `met` / `unmet` classes; styling stays with the consumer.
+- `PasswordRequirement` type and `ui.viewports.requirements`.
+
 ## [1.0.3] - 2026-06-11
 
 Fix several typos.

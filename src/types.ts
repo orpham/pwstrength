@@ -24,6 +24,30 @@ export type RuleFunction = (
     score: number
 ) => number | false | null | undefined;
 
+/**
+ * A single password requirement shown in the live checklist. Define it either with a custom `test` function (full
+ * control, not serializable) or with declarative constraints (`pattern`, `notPattern`, `minLength`, `maxLength`) that
+ * are JSON-serializable and therefore suitable for server-driven configuration. When `test` is present it takes
+ * precedence; otherwise the declarative constraints are combined with logical AND.
+ */
+export interface PasswordRequirement {
+    key: string;
+    label: string;
+    test?: (word: string) => boolean;
+    pattern?: string | RegExp;
+    notPattern?: string | RegExp;
+    minLength?: number;
+    maxLength?: number;
+    flags?: string;
+}
+
+/** A requirement after normalization: always carries a boolean `test`. */
+export interface ResolvedRequirement {
+    key: string;
+    label: string;
+    test: (word: string) => boolean;
+}
+
 export interface ScoreData {
     score: number;
     verdictText: string;
@@ -35,6 +59,7 @@ export interface UIViewports {
     verdict?: string;
     errors?: string;
     score?: string;
+    requirements?: string;
 }
 
 export interface UIElements {
@@ -42,6 +67,7 @@ export interface UIElements {
     verdict: HTMLElement | null;
     errors: HTMLElement | null;
     score: HTMLElement | null;
+    requirements: HTMLElement | null;
 }
 
 export interface PasswordStrengthOptions {
@@ -57,6 +83,7 @@ export interface PasswordStrengthOptions {
     onScore?: (word: string, score: number) => number;
     zxcvbn?: boolean;
     zxcvbnTerms?: string[];
+    requirements?: PasswordRequirement[];
     rules?: {
         activated?: Partial<Record<BuiltinRule | string, boolean>>;
         scores?: Partial<Record<BuiltinRule | string, number>>;
@@ -151,6 +178,7 @@ export interface ResolvedOptions {
     onScore: ((word: string, score: number) => number) | undefined;
     zxcvbn: boolean;
     zxcvbnTerms: string[];
+    requirements: ResolvedRequirement[];
     rules: ResolvedRules;
     ui: ResolvedUI;
     i18n: { t: (key: string) => string };

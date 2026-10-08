@@ -1,7 +1,7 @@
 {
     "name": "@orpham/pwstrength",
     "author": "orpham",
-    "version": "1.0.3",
+    "version": "1.1.0",
     "description": "Password strength meter.",
     "homepage": "https://github.com/orpham/pwstrength",
     "repository": {
@@ -48,8 +48,8 @@
         "@types/node": "^25.9.1",
         "jsdom": "^29.1.1",
         "typescript": "^5.4.5",
-        "vite": "8.0.5",
+        "vite": "8.0.16",
         "vite-plugin-dts": "^5.0.1",
-        "vitest": "^4.1.7"
+        "vitest": "^5.0.3"
     }
 }

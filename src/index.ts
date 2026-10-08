@@ -4,6 +4,7 @@ export {builtinRules} from './rules';
 export type {
     IPasswordStrength,
     PasswordStrengthOptions,
+    PasswordRequirement,
     ScoreData,
     RuleFunction,
     BuiltinRule,
