@@ -5,6 +5,10 @@
 
 Password strength meter for [Bootstrap 5](https://getbootstrap.com) — no jQuery required.
 
+|                                             Basic                                             |                                                Requirements                                                 |
+|:---------------------------------------------------------------------------------------------:|:-----------------------------------------------------------------------------------------------------------:|
+| ![Basic demo](https://raw.githubusercontent.com/orpham/pwstrength/main/assets/basic-demo.gif) | ![Requirements demo](https://raw.githubusercontent.com/orpham/pwstrength/main/assets/requirements-demo.gif) |
+
 A TypeScript rewrite of [pwstrength-bootstrap](https://github.com/ablanco/jquery.pwstrength.bootstrap) with a modern
 class-based API, full type declarations, and zero runtime dependencies.
 
